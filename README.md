@@ -24,6 +24,7 @@ dependencies {
 ```
 
 **Building the file**
+
 After cloning this repository
 run this command within the project directory,
 ```
