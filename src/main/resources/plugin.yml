@@ -1,0 +1,19 @@
+name: KSJudge
+version: '${version}'
+main: me.koro.ksjudge.KSJudge
+api-version: 1.18
+authors: [ KoroS3nPaI ]
+depend: [PlotSquared]
+commands:
+  submit:
+    description: Open the submission GUI/plot overview.
+  judge:
+    description: Access all submitted plots.
+  ptitle:
+    description: Edit your plot title.
+  plore:
+    description: Edit your plot lore.
+  pinfo:
+    description: A judge command to check the plot overview of other plots.
+  pcomment:
+    description: Write a comment for a plot(for judges).

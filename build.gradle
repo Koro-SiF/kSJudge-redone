@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.koro'
+version = '2.4.1'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        name = "OSS Sonatype"
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
+    implementation "net.kyori:adventure-api:4.11.0"
+    implementation 'com.intellectualsites.paster:Paster:1.1.4'
+    implementation 'org.apache.logging.log4j:log4j-api:2.17.2'
+    implementation 'com.plotsquared:PlotSquared-Core:6.9.0' // PlotSquared Core API
+    compileOnly('com.plotsquared:PlotSquared-Bukkit:6.9.0') { transitive = false } // PlotSquared Bukkit API
+    compileOnly 'net.luckperms:api:5.4' // Luckperms API
+}
+
+def targetJavaVersion = 17
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
