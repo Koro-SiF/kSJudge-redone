@@ -26,7 +26,7 @@ dependencies {
 **Building the file**
 
 After cloning this repository
-run this command within the project directory,
+run this command within the project directory:
 ```
 ./gradlew build
 ```
