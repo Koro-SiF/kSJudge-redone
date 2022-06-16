@@ -15,7 +15,9 @@ public class PlotUtils {
         PlotPlayer p = BukkitUtil.adapt(player);
         Plot plot = p.getCurrentPlot();
 
-        if(plot != null || plot.hasOwner()) return plot.getId();
+        if(plot == null) return null;
+
+        if(plot.hasOwner()) return plot.getId();
 
         return null;
     }

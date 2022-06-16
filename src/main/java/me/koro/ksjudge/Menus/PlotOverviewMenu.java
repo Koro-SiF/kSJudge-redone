@@ -14,8 +14,6 @@ public class PlotOverviewMenu extends Menu {
     private final SQLUtils sqlUtils = new SQLUtils();
     private final Utils utils = new Utils();
 
-    Player p = playerMenuUtils.getOwner();
-
     public PlotOverviewMenu(PlayerMenuUtils playerMenuUtils) {
         super(playerMenuUtils);
     }
@@ -32,7 +30,7 @@ public class PlotOverviewMenu extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent e) {
-        p = (Player) e.getWhoClicked();
+        Player p = (Player) e.getWhoClicked();
 
         if (e.getCurrentItem() == null) return;
 
@@ -60,15 +58,18 @@ public class PlotOverviewMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        inventory.setItem(0, utils.getHead(p));
-        inventory.setItem(3, Utils.createGuiItem(Material.WRITABLE_BOOK, ChatColor.YELLOW + "List of your submitted plots", 1));
-        if(PlotUtils.getId(p) != null){
-            inventory.setItem(5, Utils.createGuiItem(Material.PAPER,
-                    ChatColor.YELLOW + "Plot Submission Info", 1, "Title: " + sqlUtils.getPlotTitle(PlotUtils.getId(p).toString())));
+        inventory.setItem(0, utils.getHead(playerMenuUtils.getOwner()));
+        inventory.setItem(3, utils.createGuiItem(Material.WRITABLE_BOOK,
+                ChatColor.YELLOW + "List of your submitted plots", 1));
+        if(PlotUtils.getId(playerMenuUtils.getOwner()) != null){
+            inventory.setItem(5, utils.createGuiItem(Material.PAPER,
+                    ChatColor.YELLOW + "Plot Submission Info", 1, "Title: "
+                            + sqlUtils.getPlotTitle(PlotUtils.getId(playerMenuUtils.getOwner()).toString())));
         } else {
-            inventory.setItem(5, Utils.createGuiItem(Material.PAPER,
+            inventory.setItem(5, utils.createGuiItem(Material.PAPER,
                 ChatColor.YELLOW + "Plot Submission Info", 1, "You must be on your plot"));
         }
-        inventory.setItem(8, Utils.createGuiItem(Material.GREEN_CONCRETE, ChatColor.DARK_GREEN + "Submit Plot", 1, ""));
+        inventory.setItem(8, utils.createGuiItem(Material.GREEN_CONCRETE,
+                ChatColor.DARK_GREEN + "Submit Plot", 1, ""));
     }
 }

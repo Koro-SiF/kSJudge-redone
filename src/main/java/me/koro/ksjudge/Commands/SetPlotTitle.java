@@ -29,8 +29,8 @@ public class SetPlotTitle implements CommandExecutor {
 
         Player p = (Player) sender;
 
-        if(!(p.hasPermission("kjudge.ptitle"))) {
-            p.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "kjudge.ptitle");
+        if(!(p.hasPermission("ksjudge.ptitle"))) {
+            p.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.ptitle");
             return true;
         }
 

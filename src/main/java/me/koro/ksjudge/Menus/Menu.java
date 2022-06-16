@@ -24,8 +24,8 @@ public abstract class Menu implements InventoryHolder {
     //Constructor for Menu. Pass in a PlayerMenuUtility so that
     // we have information on who's menu this is and
     // what info is to be transfered
-    public Menu(PlayerMenuUtils playerMenuUtils) {
-        this.playerMenuUtils = this.playerMenuUtils;
+    public Menu(PlayerMenuUtils PlayerMenuUtils) {
+        this.playerMenuUtils = PlayerMenuUtils;
     }
 
     //let each menu decide their name

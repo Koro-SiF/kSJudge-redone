@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class KSJudge extends JavaPlugin implements Listener {
+public final class KSJudge extends JavaPlugin implements Listener {
 
     public SQLCreate data;
     public MySQL SQL;
@@ -26,12 +26,17 @@ public class KSJudge extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         Bukkit.getConsoleSender().sendMessage("Enabling kSJudge!");
-        Bukkit.getConsoleSender().sendMessage("Version: 2.4.1");
+        Bukkit.getConsoleSender().sendMessage("Version: 2.4.3");
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-
+        new Submit(this);
+        new Judge(this);
+        new SetPlotTitle(this);
+        new SetPlotLore(this);
+        new SetPlotComment(this);
+        new MenuListener(this);
 
         // Load an instance of 'LuckPerms' using the services manager.
         this.luckPerms = getServer().getServicesManager().load(LuckPerms.class);
@@ -57,28 +62,6 @@ public class KSJudge extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 
-        new Submit(this);
-        new Judge(this);
-        new SetPlotTitle(this);
-        new SetPlotLore(this);
-        new SetPlotComment(this);
-        new MenuListener(this);
-    }
-
-    //Provide a player and return a menu system for that player
-    //create one if they don't already have one
-    public PlayerMenuUtils getPlayerMenuUtils(Player p) {
-        PlayerMenuUtils playerMenuUtils;
-        if (!(playerMenuUtilsMap.containsKey(p))) { //See if the player has a playermenutils "saved" for them
-
-            //This player doesn't. Make one for them add add it to the hashmap
-            playerMenuUtils = new PlayerMenuUtils(p);
-            playerMenuUtilsMap.put(p, playerMenuUtils);
-
-            return playerMenuUtils;
-        } else {
-            return playerMenuUtilsMap.get(p); //Return the object by using the provided player
-        }
     }
 
     @Override
@@ -94,4 +77,21 @@ public class KSJudge extends JavaPlugin implements Listener {
     public static KSJudge getInstance() {
         return (KSJudge) getPlugin(KSJudge.class);
     }
+
+    //Provide a player and return a menu system for that player
+    //create one if they don't already have one
+    public static PlayerMenuUtils getPlayerMenuUtils(Player p) {
+        PlayerMenuUtils playerMenuUtils;
+        if (!(playerMenuUtilsMap.containsKey(p))) { //See if the player has a playermenutils "saved" for them
+
+            //This player doesn't. Make one for them and add it to the hashmap
+            playerMenuUtils = new PlayerMenuUtils(p);
+            playerMenuUtilsMap.put(p, playerMenuUtils);
+
+            return playerMenuUtils;
+        } else {
+            return playerMenuUtilsMap.get(p); //Return the object by using the provided player
+        }
+    }
+
 }

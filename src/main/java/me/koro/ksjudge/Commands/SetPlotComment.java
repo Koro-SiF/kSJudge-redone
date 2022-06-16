@@ -35,8 +35,8 @@ public class SetPlotComment implements CommandExecutor {
         if (!(sender instanceof Player)) { this.plugin.getConfig().getString("Console.error"); return true;}
 
         Player p = (Player) sender;
-        if(!(p.hasPermission("kjudge.pcomment"))) {
-            p.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "kjudge.pcomment");
+        if(!(p.hasPermission("ksjudge.pcomment"))) {
+            p.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.pcomment");
             return true;
         }
 

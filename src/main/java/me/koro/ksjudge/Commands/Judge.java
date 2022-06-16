@@ -22,9 +22,9 @@ public class Judge implements CommandExecutor {
             this.plugin.getConfig().getString("Console.error");
         } else {
             Player player = (Player) sender;
-            if(player.hasPermission("kjudge.judge")) {
+            if(player.hasPermission("ksjudge.judge")) {
                 new JudgeMenu(plugin.getPlayerMenuUtils(player)).open();
-            } else player.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "kjudge.judge");
+            } else player.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.judge");
         }
 
         return true;

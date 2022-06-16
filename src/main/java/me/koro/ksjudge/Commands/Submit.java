@@ -26,18 +26,18 @@ public class Submit implements CommandExecutor {
         if (!(sender instanceof Player)) { this.plugin.getConfig().getString("Console.error"); return true;}
 
         Player player = (Player) sender;
-        if(!player.hasPermission("kjudge.submit")) {
-            player.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "kjudge.submit");
+        if(!player.hasPermission("ksjudge.submit")) {
+            player.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.submit");
             return true;
         }
 
         sqlUtils.setPlotTable(player);
         if (PlotUtils.getId(player) != null) {
             sqlUtils.addPlotID(PlotUtils.getId(player).toString());
+            new PlotOverviewMenu(KSJudge.getPlayerMenuUtils(player)).open();
         } else
             player.sendMessage(ChatColor.RED + "You must stand on your plot");
 
-        new PlotOverviewMenu(plugin.getPlayerMenuUtils(player)).open();
         return true;
     }
 
