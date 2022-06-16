@@ -26,7 +26,7 @@ public final class KSJudge extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         Bukkit.getConsoleSender().sendMessage("Enabling kSJudge!");
-        Bukkit.getConsoleSender().sendMessage("Version: 2.4.3");
+        Bukkit.getConsoleSender().sendMessage("Version: 2.4.8");
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();

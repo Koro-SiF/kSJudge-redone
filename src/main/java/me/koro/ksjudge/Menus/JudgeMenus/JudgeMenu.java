@@ -2,7 +2,6 @@ package me.koro.ksjudge.Menus.JudgeMenus;
 
 import me.koro.ksjudge.KSJudge;
 import me.koro.ksjudge.Menus.Menu;
-import me.koro.ksjudge.Menus.SubmittedMenu;
 import me.koro.ksjudge.Utility.PlayerMenuUtils;
 import me.koro.ksjudge.Utility.PlotUtils;
 import me.koro.ksjudge.Utility.Utils;
@@ -35,9 +34,13 @@ public class JudgeMenu extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent e) {
-        p = (Player) e.getWhoClicked();
-        UUID uuid = UUID.nameUUIDFromBytes(PlotUtils.getId(p).toString().getBytes());
-        boolean exists =  KSJudge.getInstance().data.exists(uuid);
+        Player p = (Player) e.getWhoClicked();
+        boolean exists = false;
+
+        if(PlotUtils.getId(p) != null){
+            UUID uuid = UUID.nameUUIDFromBytes(PlotUtils.getId(p).toString().getBytes());
+            exists =  KSJudge.getInstance().data.exists(uuid);
+        }
 
         if (e.getCurrentItem() == null) return;
 
@@ -48,7 +51,6 @@ public class JudgeMenu extends Menu {
                     new JudgePlotInfoMenu(playerMenuUtils).open();
                 else
                     p.sendMessage(ChatColor.RED + "You must stand on a submitted plot");
-
                 break;
             }
         }

@@ -44,9 +44,9 @@ public class SQLUtils {
     }
 
     public OfflinePlayer getPlayerByID(String id){
-        OfflinePlayer p = Bukkit.getServer().getPlayer(getPlayerName(id));;
+        OfflinePlayer p = Bukkit.getServer().getPlayer(getPlayerName(id));
         if(p == null) {
-            p = plugin.getServer().getPlayer(getPlayerName(id));
+            p = plugin.getServer().getOfflinePlayer(getPlayerName(id));
             return p;
         }
         return p;

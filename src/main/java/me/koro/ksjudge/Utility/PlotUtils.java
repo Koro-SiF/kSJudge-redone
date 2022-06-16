@@ -4,6 +4,7 @@ import com.plotsquared.bukkit.util.BukkitUtil;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotId;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class PlotUtils {
@@ -11,8 +12,8 @@ public class PlotUtils {
     public PlotUtils(){
     }
 
-    public static PlotId getId(Player player){
-        PlotPlayer p = BukkitUtil.adapt(player);
+    public static PlotId getId(OfflinePlayer player){
+        PlotPlayer p = BukkitUtil.adapt((Player) player);
         Plot plot = p.getCurrentPlot();
 
         if(plot == null) return null;

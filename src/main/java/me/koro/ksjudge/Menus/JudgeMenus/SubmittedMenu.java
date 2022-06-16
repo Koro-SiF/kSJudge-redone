@@ -1,5 +1,6 @@
-package me.koro.ksjudge.Menus;
+package me.koro.ksjudge.Menus.JudgeMenus;
 
+import me.koro.ksjudge.Menus.PaginatedMenu;
 import me.koro.ksjudge.Utility.PlayerMenuUtils;
 import me.koro.ksjudge.Utility.SQLUtils;
 import me.koro.ksjudge.Utility.Utils;

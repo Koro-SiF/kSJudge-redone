@@ -1,7 +1,6 @@
 package me.koro.ksjudge.Utility;
 
 import me.koro.ksjudge.KSJudge;
-import me.koro.ksjudge.SQL.SQLCreate;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -44,15 +43,15 @@ public class Utils {
         return item;
     }
 
-    public ItemStack getHead(OfflinePlayer player, String... lore){
+    public ItemStack getHead(Player p, String... lore){
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta.setOwningPlayer(player);
-        meta.setDisplayName(player.getName());
 
-        Player p = (Player)player;
+        meta.setOwningPlayer(p);
+        meta.setDisplayName(p.getName());
+
         String plotStatus = sqlUtils.getPlotStatus(sqlUtils.getPlotID(p));
-        String playerGroup = lpUtils.getPlayerGroup(player);
+        String playerGroup = lpUtils.getPlayerGroup(p);
 
         List<String> loreList = new ArrayList<>();
         loreList.add(PlotUtils.printId(p, PlotUtils.getId(p)));
@@ -65,18 +64,38 @@ public class Utils {
         return skull;
     }
 
+    public ItemStack getHead(Player p, String id){
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+
+
+        meta.setOwningPlayer(p);
+        meta.setDisplayName(p.getName());
+
+        List<String> l = new ArrayList<>();
+        l.add(id);
+        if(PlotUtils.getId(p) != null) {
+            l.add(ChatColor.GRAY + "Status: " + ChatColor.GOLD + sqlUtils.getPlotStatus(id));
+            l.add(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + lpUtils.getPlayerGroup(p));
+        }
+        meta.setLore(l);
+        skull.setItemMeta(meta);
+
+        return skull;
+    }
+
     public ItemStack getHead(OfflinePlayer player, String id){
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
+
         meta.setOwningPlayer(player);
         meta.setDisplayName(player.getName());
 
         List<String> l = new ArrayList<>();
         l.add(id);
-        if(PlotUtils.getId((Player) player) != null) {
-            l.add(ChatColor.GRAY + "Status: " + ChatColor.GOLD + sqlUtils.getPlotStatus(id));
-            l.add(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + lpUtils.getPlayerGroup(player));
-        }
+        l.add(ChatColor.GRAY + "Status: " + ChatColor.GOLD + sqlUtils.getPlotStatus(id));
+        l.add(ChatColor.GRAY + "Rank: " + ChatColor.GOLD + lpUtils.getPlayerGroup(player));
+
         meta.setLore(l);
         skull.setItemMeta(meta);
 

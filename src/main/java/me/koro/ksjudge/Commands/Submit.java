@@ -1,5 +1,7 @@
 package me.koro.ksjudge.Commands;
 
+import com.plotsquared.core.plot.Plot;
+import com.plotsquared.core.plot.PlotId;
 import me.koro.ksjudge.KSJudge;
 import me.koro.ksjudge.Menus.PlotOverviewMenu;
 import me.koro.ksjudge.Utility.PlotUtils;
@@ -31,13 +33,18 @@ public class Submit implements CommandExecutor {
             return true;
         }
 
-        sqlUtils.setPlotTable(player);
-        if (PlotUtils.getId(player) != null) {
-            sqlUtils.addPlotID(PlotUtils.getId(player).toString());
-            new PlotOverviewMenu(KSJudge.getPlayerMenuUtils(player)).open();
-        } else
-            player.sendMessage(ChatColor.RED + "You must stand on your plot");
+        PlotId id = PlotUtils.getId(player);
+        boolean isOwner = sqlUtils.getPlayerName(id.toString()) == player.getName();
 
+        if (id == null || !isOwner) {
+            player.sendMessage(ChatColor.RED + "You must stand on your plot");
+            return true;
+        }
+
+        sqlUtils.setPlotTable(player);
+
+        sqlUtils.addPlotID(PlotUtils.getId(player).toString());
+        new PlotOverviewMenu(KSJudge.getPlayerMenuUtils(player)).open();
         return true;
     }
 
