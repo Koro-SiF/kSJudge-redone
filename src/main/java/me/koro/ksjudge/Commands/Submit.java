@@ -34,16 +34,22 @@ public class Submit implements CommandExecutor {
         }
 
         PlotId id = PlotUtils.getId(player);
+
+        if(id == null) {
+            player.sendMessage(ChatColor.RED + "You must stand on your plot");
+            return true;
+        }
+
         boolean isOwner = sqlUtils.getPlayerName(id.toString()) == player.getName();
 
-        if (id == null || !isOwner) {
+        if (!isOwner) {
             player.sendMessage(ChatColor.RED + "You must stand on your plot");
             return true;
         }
 
         sqlUtils.setPlotTable(player);
 
-        sqlUtils.addPlotID(PlotUtils.getId(player).toString());
+        sqlUtils.addPlotID(id.toString());
         new PlotOverviewMenu(KSJudge.getPlayerMenuUtils(player)).open();
         return true;
     }
