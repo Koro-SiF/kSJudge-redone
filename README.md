@@ -22,3 +22,10 @@ dependencies {
     compileOnly 'net.luckperms:api:5.4' // Luckperms API
 }
 ```
+
+**Building the file**
+After cloning this repository
+run this command within the project directory,
+```
+./gradlew build
+```
