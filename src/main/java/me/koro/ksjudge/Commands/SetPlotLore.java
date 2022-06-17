@@ -1,5 +1,7 @@
 package me.koro.ksjudge.Commands;
 
+import com.plotsquared.bukkit.util.BukkitUtil;
+import com.plotsquared.core.player.PlotPlayer;
 import me.koro.ksjudge.KSJudge;
 import me.koro.ksjudge.Utility.PlotUtils;
 import me.koro.ksjudge.Utility.SQLUtils;
@@ -7,6 +9,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,18 +34,27 @@ public class SetPlotLore implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
         if(!(sender instanceof Player)){ this.plugin.getConfig().getString("Console.error"); return true;}
 
-        Player p = (Player) sender;
-        if(!(p.hasPermission("ksjudge.plore"))) {
-            p.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.plore");
+        Player player = (Player) sender;
+        if(!(player.hasPermission("ksjudge.plore"))) {
+            player.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.plore");
             return true;
         }
 
-        if(PlotUtils.getId(p) == null) {
-            p.sendMessage(ChatColor.RED + "You must be on your plot");
+        if(PlotUtils.getId(player) == null) {
+            player.sendMessage(ChatColor.RED + "You must be on your plot");
             return true;
         }
 
-        sqlUtils.setPlotTable(p);
+        PlotPlayer p = BukkitUtil.adapt(player);
+
+        boolean isOwner = Bukkit.getOfflinePlayer(p.getCurrentPlot().getOwner()).getName() == player.getName();
+
+        if (!isOwner) {
+            player.sendMessage(ChatColor.RED + "You must stand on your plot");
+            return true;
+        }
+
+        sqlUtils.setPlotTable(player);
 
         if (args.length == 0) {
             TextComponent loreEdit = new TextComponent(ChatColor.GREEN + "[Edit plot lore] ");
@@ -56,7 +68,7 @@ public class SetPlotLore implements CommandExecutor {
             loreAdd.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                   new ComponentBuilder(ChatColor.GRAY + "Click to add to lore").create()));
 
-            p.spigot().sendMessage(loreEdit, loreAdd);
+            player.spigot().sendMessage(loreEdit, loreAdd);
             return true;
         }
 
@@ -67,14 +79,14 @@ public class SetPlotLore implements CommandExecutor {
                     lore.add(s);
                 }
                 lore.remove(0);
-                sqlUtils.addPlotLore(PlotUtils.getId(p).toString(), String.join(" ", lore));
-                p.sendMessage(ChatColor.GOLD + "Lore updated");
+                sqlUtils.addPlotLore(PlotUtils.getId(player).toString(), String.join(" ", lore));
+                player.sendMessage(ChatColor.GOLD + "Lore updated");
                 break;
             }
             case "add" -> {
                 List<String> loreadd = new ArrayList<>();
                 List<String> orlore = new ArrayList<>();
-                orlore.add(sqlUtils.getPlotLore(PlotUtils.getId(p).toString()));
+                orlore.add(sqlUtils.getPlotLore(PlotUtils.getId(player).toString()));
                 for (String s : args) {
                     loreadd.add(s);
                 }
@@ -82,8 +94,8 @@ public class SetPlotLore implements CommandExecutor {
                 List<String> addedlore = Stream.of(orlore, loreadd)
                         .flatMap(x -> x.stream())
                         .collect(Collectors.toList());
-                sqlUtils.addPlotLore(PlotUtils.getId(p).toString(), String.join(" ", addedlore));
-                p.sendMessage(ChatColor.GOLD + "Lore updated");
+                sqlUtils.addPlotLore(PlotUtils.getId(player).toString(), String.join(" ", addedlore));
+                player.sendMessage(ChatColor.GOLD + "Lore updated");
                 break;
             }
         }

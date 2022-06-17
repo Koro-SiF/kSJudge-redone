@@ -1,8 +1,11 @@
 package me.koro.ksjudge.Commands;
 
+import com.plotsquared.bukkit.util.BukkitUtil;
+import com.plotsquared.core.player.PlotPlayer;
 import me.koro.ksjudge.KSJudge;
 import me.koro.ksjudge.Utility.PlotUtils;
 import me.koro.ksjudge.Utility.SQLUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,28 +30,37 @@ public class SetPlotTitle implements CommandExecutor {
 
         if(!(sender instanceof Player)){ this.plugin.getConfig().getString("Console.error"); return true;}
 
-        Player p = (Player) sender;
+        Player player = (Player) sender;
 
-        if(!(p.hasPermission("ksjudge.ptitle"))) {
-            p.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.ptitle");
+        if(!(player.hasPermission("ksjudge.ptitle"))) {
+            player.sendMessage(ChatColor.GRAY + "Lacking permission: " + ChatColor.GOLD + "ksjudge.ptitle");
             return true;
         }
 
-        if(PlotUtils.getId(p) == null) {
-            p.sendMessage(ChatColor.RED + "You must be on your plot");
+        if(PlotUtils.getId(player) == null) {
+            player.sendMessage(ChatColor.RED + "You must be on your plot");
             return true;
         }
 
-        sqlUtils.setPlotTable(p);
-        if (args.length == 0) p.sendMessage(ChatColor.GREEN + "Input a title for you plot: /ptitle [title]");
+        PlotPlayer p = BukkitUtil.adapt(player);
+
+        boolean isOwner = Bukkit.getOfflinePlayer(p.getCurrentPlot().getOwner()).getName() == player.getName();
+
+        if (!isOwner) {
+            player.sendMessage(ChatColor.RED + "You must stand on your plot");
+            return true;
+        }
+
+        sqlUtils.setPlotTable(player);
+        if (args.length == 0) player.sendMessage(ChatColor.GREEN + "Input a title for you plot: /ptitle [title]");
 
         List<String> title = new ArrayList<>();
         for (String s : args) {
             title.add(s);
-            sqlUtils.addPlotTitle(PlotUtils.getId(p).toString(), String.join(" ", title));
+            sqlUtils.addPlotTitle(PlotUtils.getId(player).toString(), String.join(" ", title));
         }
 
-        p.sendMessage(ChatColor.GOLD + "Title updated");
+        player.sendMessage(ChatColor.GOLD + "Title updated");
 
         return true;
     }

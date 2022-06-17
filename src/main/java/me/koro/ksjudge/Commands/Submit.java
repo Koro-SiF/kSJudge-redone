@@ -1,12 +1,17 @@
 package me.koro.ksjudge.Commands;
 
+import com.plotsquared.bukkit.util.BukkitUtil;
+import com.plotsquared.core.location.Location;
+import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotId;
 import me.koro.ksjudge.KSJudge;
 import me.koro.ksjudge.Menus.PlotOverviewMenu;
 import me.koro.ksjudge.Utility.PlotUtils;
 import me.koro.ksjudge.Utility.SQLUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +45,9 @@ public class Submit implements CommandExecutor {
             return true;
         }
 
-        boolean isOwner = sqlUtils.getPlayerName(id.toString()) == player.getName();
+        PlotPlayer p = BukkitUtil.adapt(player);
+
+        boolean isOwner = Bukkit.getOfflinePlayer(p.getCurrentPlot().getOwner()).getName() == player.getName();
 
         if (!isOwner) {
             player.sendMessage(ChatColor.RED + "You must stand on your plot");
